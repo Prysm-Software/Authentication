@@ -5,8 +5,27 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:AD.Test"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="AD.Test" Height="450" Width="800" Loaded="Window_Loaded">
     <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="1*"/>
+            <ColumnDefinition Width="auto"/>
+            <ColumnDefinition Width="2*"/>
+        </Grid.ColumnDefinitions>
         
+        <UniformGrid Columns="2" VerticalAlignment="Top">
+            <TextBlock>Computer domain</TextBlock>
+            <TextBlock x:Name="computer_domain"/>
+            <TextBlock>User identiy</TextBlock>
+            <TextBlock/>
+            <TextBlock>Domain</TextBlock>
+            <Grid>
+                <TextBox/>
+                <TextBlock Text="rien" Foreground="LightGray" Margin="4 0" />
+            </Grid>
+        </UniformGrid>
+
+        <GridSplitter Grid.Column="1" Width="2"/>
+        <TextBox Grid.Column="2"/>
     </Grid>
 </Window>
