@@ -1,0 +1,68 @@
+﻿<Window x:Class="LDAP.Test.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:l="clr-namespace:LDAP.Test"
+        xmlns:p="clr-namespace:LDAP.Test.Properties"
+        mc:Ignorable="d"
+        Title="LDAP.Test 2021 v1" Height="450" Width="800">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="300" x:Name="leftPane"/>
+            <ColumnDefinition Width="2"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.Resources>
+            <Style x:Key="margin-4">
+                <Setter Property="Control.Margin" Value="4 0" />
+            </Style>
+        </Grid.Resources>
+        <GridSplitter Grid.Column="1" HorizontalAlignment="Stretch"/>
+
+        <ItemsControl DataContext="{x:Static p:Settings.Default}" 
+                      ItemContainerStyle="{StaticResource margin-4}"
+                      ToggleButton.Checked="Security_Changed">
+            <Label FontSize="16">LDAP settings</Label>
+            <Label>Server</Label>
+            <TextBox Text="{Binding Server}"/>
+            <Label>Base directory</Label>
+            <TextBox Text="{Binding Directory}"/>
+            <Label>User</Label>
+            <TextBox Text="{Binding User}"/>
+            <Label>Password</Label>
+            <PasswordBox x:Name="settings_pwd"/>
+            <Label>Port</Label>
+            <TextBox Text="{Binding Port}" Name="port"/>
+            <Label>Security</Label>
+            <RadioButton IsChecked="True">None</RadioButton>
+            <RadioButton IsChecked="{Binding EnableSSL}">EnableSSL</RadioButton>
+            <RadioButton IsChecked="{Binding StartTLS}">StartTLS</RadioButton>
+            <Label>Query filter</Label>
+            <TextBox Text="{Binding Filter}"/>
+        </ItemsControl>
+
+        <DockPanel Grid.Column="2">
+            <ItemsControl DockPanel.Dock="Top" Margin="16 8 8 8">
+                <DockPanel>
+                    <Label Width="100">User name</Label>
+                    <TextBox Name="user_name"/>
+                </DockPanel>
+                <DockPanel>
+                    <Label Width="100">Password</Label>
+                    <PasswordBox x:Name="user_pwd"/>
+                </DockPanel>
+                <Button Click="Validate">Validate credentials</Button>
+            </ItemsControl>
+
+            <TextBox x:Name="log"/>
+        </DockPanel>
+        
+        <Grid ClipToBounds="True" Grid.Column="2">
+            <Border VerticalAlignment="Top" HorizontalAlignment="Left" Margin="-10" CornerRadius="10" Width="30" Height="40"
+                    ToolTip="LDAP settings" Cursor="Hand" Background="LightGray" MouseLeftButtonUp="Settings_Click">
+                <TextBlock Margin="12 16 0 0">🛠️</TextBlock>
+            </Border>
+        </Grid>
+    </Grid>
+</Window>
