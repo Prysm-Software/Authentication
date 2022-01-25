@@ -6,7 +6,7 @@
         xmlns:l="clr-namespace:LDAP.Test"
         xmlns:p="clr-namespace:LDAP.Test.Properties"
         mc:Ignorable="d"
-        Title="LDAP.Test 2021 v1" Height="450" Width="800">
+        Title="LDAP.Test 2022 v2" Height="450" Width="800">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="300" x:Name="leftPane"/>
