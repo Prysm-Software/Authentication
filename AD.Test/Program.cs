@@ -7,7 +7,7 @@ using static Utils;
 
 namespace AD.Test
 {
-	internal class Program
+    internal class Program
     {
         static void Main(string[] args)
         {
@@ -20,7 +20,7 @@ namespace AD.Test
         static string run()
         {
             // envir info
-            Try("User identity    : ", () => WindowsIdentity.GetCurrent().Name);
+            var userid = Try("User identity    : ", () => WindowsIdentity.GetCurrent().Name);
             Try("Computer name    : ", () => Environment.MachineName);
             Try("Host name        : ", () => Dns.GetHostName());
             Try("Current domain   : ", () => Domain.GetCurrentDomain().Name);
@@ -28,19 +28,34 @@ namespace AD.Test
             Console.WriteLine();
             Console.WriteLine("This tool connects to an Active Directory server, queries a user details and validates its credentials.");
 
-            // prompt for user credentials
+            // select optional domain name and credentials
             var help = string.IsNullOrEmpty(defDomain) ? "" : $". Leave empty to use '{defDomain}'";
-            Console.WriteLine($"Domain name or server hostname{help}:");
-            var domain = Console.ReadLine();
-            if (string.IsNullOrEmpty(domain))
-                domain = defDomain;
+            Console.WriteLine($"Optional domain name or server hostname{help}:");
+            string domainUser = null;
+            string domainPwd = null;
+            string domain = Console.ReadLine();
+            if (!string.IsNullOrEmpty(domain))
+            {
+                Console.WriteLine($"Optional domain user. Leave empty to connect as '{userid}':");
+                domainUser = Console.ReadLine();
+                if (!string.IsNullOrEmpty(domainUser))
+                {
+                    Console.WriteLine($"Domain password:");
+                    domainPwd = ReadPassword();
+                }
+                else domainUser = null;
+            }
+            else domain = defDomain;
+
+            // prompt for a username and a passowrd
             Console.WriteLine("User name to validate:");
             var accountname = Console.ReadLine();
+
             Console.WriteLine($"Password for {accountname}:");
             var pwd = ReadPassword();
 
             // query AD DS for user info
-            var context = Try("Create PrincipalContext... ", () => new PrincipalContext(ContextType.Domain, domain/*, userName, password*/)); //todo select AD login info
+            var context = Try("Create PrincipalContext... ", () => new PrincipalContext(ContextType.Domain, domain, domainUser, domainPwd));
             if (context == null)
                 throw new Exception($"Failed to connect domain '{domain}'");
 
@@ -48,7 +63,7 @@ namespace AD.Test
 
             var user = Try("Query UserPrincipal..      ", () => UserPrincipal.FindByIdentity(context, accountname));
             if (user == null)
-                throw new Exception( $"User '{accountname}' not found");
+                throw new Exception($"User '{accountname}' not found");
 
             var groups = Try("Get authorization groups   ", () => user.GetAuthorizationGroups());
             if (groups != null)
