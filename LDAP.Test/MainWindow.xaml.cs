@@ -88,30 +88,37 @@ namespace LDAP.Test
 					Log($"password is valid.");
 
 					// query membership
-					IEnumerable<string> ldapGroups = null;
+					var ldapGroups = new List<string>();
+
+					// Active Directory flavour (memberOf)
+					var memberOf = user.Attributes["memberOf"];
+					if (memberOf != null) 
+					{
+						ldapGroups.AddRange(from g in memberOf.GetValues(typeof(string)) select (string)g);
+						Log($"querying groups by 'memberOf' attribute: {ldapGroups.Count} groups found.");
+					}
 
 					var userUid = user.Attributes["uid"];
 					if (userUid != null) // ldap standard (RFC2307 - posixGroup with memberUid)
 					{
-						Log($"querying user membership...");
+						Log($"querying groups by (memberuid={userUid[0]}) query...");
 						res = (SearchResponse)ldap.SendRequest(new SearchRequest(sett.Directory, $"(memberuid={userUid[0]})", SearchScope.Subtree));
 						Log($"{res.ResultCode}");
 
 						if (res.ResultCode != ResultCode.Success)
 							throw new Exception(res.ErrorMessage);
 
-						ldapGroups = from SearchResultEntry g in res.Entries
-									 select (string)g.Attributes["cn"][0];
+						ldapGroups.AddRange(from SearchResultEntry g in res.Entries
+											let cn = g.Attributes["cn"]
+											where cn != null
+											select (string)cn[0]);
 					}
-					else // Active Directory flavour (memberOf)
-					{
-						ldapGroups = from g in user.Attributes["memberOf"].GetValues(typeof(string))
-									 select ((string)g);
-					}
-					Log($"User '{user_name.Text}' belongs to the following groups:");
+
+					Log($"{ldapGroups.Count} group(s) found for user '{user_name.Text}'");
 					foreach (var ldapGroup in ldapGroups)
 						Log("	• " + ldapGroup);
 
+					Log("");
 					Log($"Info for user '{user_name.Text}':");
 					Log("	givenName		: " + user.GetAttribute("givenName") ?? user.GetAttribute("gn"));
 					Log("	sn  			: " + user.GetAttribute("sn"));
