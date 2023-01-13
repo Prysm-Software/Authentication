@@ -11,7 +11,7 @@ namespace AD.Test
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("\n   AD.Test 2021 v1\n");
+            Console.WriteLine("\n   AD.Test 2023 v2\n");
             Try("", run);
             Console.WriteLine("Press any key...");
             Console.ReadKey();
