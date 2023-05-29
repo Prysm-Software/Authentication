@@ -40,6 +40,8 @@
             <RadioButton IsChecked="{Binding StartTLS}">StartTLS</RadioButton>
             <Label>Query filter</Label>
             <TextBox Text="{Binding Filter}"/>
+            <Label>Timeout (sec)</Label>
+            <TextBox Text="{Binding Timeout}"/>
         </ItemsControl>
 
         <DockPanel Grid.Column="2">

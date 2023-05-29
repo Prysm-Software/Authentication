@@ -8,7 +8,7 @@ using System.Windows;
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyCompany("Prysm")]
 [assembly: AssemblyProduct("LDAP.Test")]
-[assembly: AssemblyCopyright("Copyright © Prysm 2022")]
+[assembly: AssemblyCopyright("Copyright © Prysm 2023")]
 [assembly: ComVisible(false)]
 [assembly: ThemeInfo(
 	ResourceDictionaryLocation.None, //where theme specific resource dictionaries are located
@@ -18,4 +18,4 @@ using System.Windows;
 											  //(used if a resource is not found in the page,
 											  // app, or any theme specific resource dictionaries)
 )]
-[assembly: AssemblyVersion("2")]
+[assembly: AssemblyVersion("3")]
