@@ -1,2 +1,2 @@
 # Authentication
-Utility programs to test Active Directory or LDAP authentication in C#.
+Utility programs to test the Active Directory or LDAP authentication in AppVision.
