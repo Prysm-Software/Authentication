@@ -60,7 +60,7 @@ namespace LDAP.Test
                         ldap.SessionOptions.StartTransportLayerSecurity(null); // port 389
 
                     // connect to LDAP server
-                    ldap.Timeout = TimeSpan.FromMilliseconds(sett.Timeout);
+                    ldap.Timeout = TimeSpan.FromSeconds(sett.Timeout);
                     ldap.SessionOptions.ProtocolVersion = 3;
                     ldap.AuthType = AuthType.Basic;
                     Log($"connecting to '{svr}' as '{sett.User}'");
