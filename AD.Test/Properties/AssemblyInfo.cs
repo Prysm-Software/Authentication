@@ -6,6 +6,6 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyCompany("Prysm")]
 [assembly: AssemblyProduct("AD.Test")]
-[assembly: AssemblyCopyright("Copyright © Prysm 2021")]
+[assembly: AssemblyCopyright("Copyright © Prysm 2024")]
 [assembly: ComVisible(false)]
-[assembly: AssemblyVersion("1.0.0.0")]
+[assembly: AssemblyVersion("4")]

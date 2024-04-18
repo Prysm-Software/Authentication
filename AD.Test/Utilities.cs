@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 
 
 static class Utils
@@ -7,10 +8,19 @@ static class Utils
 	#region utilities
 	internal static T Try<T>(string label, Func<T> value, ConsoleColor errColor = ConsoleColor.Red)
 	{
+		var s = Stopwatch.StartNew();
 		try
 		{
 			Console.Write(label);
 			var val = value();
+
+			if (s.ElapsedMilliseconds > 50)
+			{
+				Console.ForegroundColor = ConsoleColor.DarkGray;
+				Console.Write($"({s.ElapsedMilliseconds/1000d:n2}s)	");
+				Console.ResetColor();
+			}	
+
 			Console.WriteLine(val);
 			return val;
 		}

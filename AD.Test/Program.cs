@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Diagnostics;
+using System.DirectoryServices;
 using System.DirectoryServices.AccountManagement;
 using System.DirectoryServices.ActiveDirectory;
 using System.Net;
@@ -11,7 +13,7 @@ namespace AD.Test
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("\n   AD.Test 2023 v2\n");
+            Console.WriteLine("\n   AD.Test 2024 v4\n");
             Try("", run);
             Console.WriteLine("Press any key...");
             Console.ReadKey();
@@ -65,7 +67,7 @@ namespace AD.Test
             if (user == null)
                 throw new Exception($"User '{accountname}' not found");
 
-            var groups = Try("Get authorization groups   ", () => user.GetAuthorizationGroups());
+			var groups = Try("Get authorization groups (recursive)  ", () => user.GetAuthorizationGroups());
             if (groups != null)
             {
                 Console.WriteLine($"User '{accountname}' belongs to the following groups:");
