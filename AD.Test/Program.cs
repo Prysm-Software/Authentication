@@ -9,19 +9,35 @@ using static Utils;
 
 namespace AD.Test
 {
+    /// <summary>
+    /// Diagnostic console tool for AppVision installers: it connects to an Active Directory
+    /// Domain Services server, validates a user's credentials and dumps the account details and
+    /// authorization groups AppVision reads when authenticating against AD.
+    ///
+    /// It uses <see cref="System.DirectoryServices.AccountManagement"/> (PrincipalContext), the
+    /// same high-level API AppVision relies on, so a failure here reproduces a real AD problem
+    /// (unreachable domain, wrong credentials, account lockout, missing attributes, ...).
+    /// </summary>
     internal class Program
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("\n   AD.Test 2024 v4\n");
+            Console.WriteLine("\n   AD.Test 2026 v4\n");
             Try("", run);
             Console.WriteLine("Press any key...");
             Console.ReadKey();
         }
 
+        /// <summary>
+        /// Runs the full diagnostic: prints the environment, optionally binds to a specific domain
+        /// with alternate credentials, validates the target user's password, then queries the
+        /// user's groups and profile attributes. Each step is wrapped in <see cref="Utils.Try"/> so
+        /// a failure is reported inline (in red) without aborting the whole run.
+        /// </summary>
         static string run()
         {
-            // envir info
+            // environment info: who we run as and which domain we are joined to
+            // (used as defaults below when no explicit domain/credentials are given)
             var userid = Try("User identity    : ", () => WindowsIdentity.GetCurrent().Name);
             Try("Computer name    : ", () => Environment.MachineName);
             Try("Host name        : ", () => Dns.GetHostName());
@@ -61,6 +77,8 @@ namespace AD.Test
             if (context == null)
                 throw new Exception($"Failed to connect domain '{domain}'");
 
+            // ContextOptions.Negotiate = Kerberos/NTLM (the binding AppVision uses); a false result
+            // means the password is wrong, expired or the account is locked/disabled.
             bool valid = Try("Validate password...       ", () => context.ValidateCredentials(accountname, pwd, ContextOptions.Negotiate));
 
             var user = Try("Query UserPrincipal..      ", () => UserPrincipal.FindByIdentity(context, accountname));

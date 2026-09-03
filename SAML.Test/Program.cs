@@ -25,7 +25,7 @@ namespace SAML.Test
 
 		static void Main()
 		{
-			Console.WriteLine("\n   SAML.Test 2024 v4\n");
+			Console.WriteLine("\n   SAML.Test 2026 v4\n");
 			Console.WriteLine("This tool acts as an AppVision SAML Service Provider: it sends an AuthnRequest to your");
 			Console.WriteLine("Identity Provider, receives the SAML response and validates it, exactly like the plugin.\n");
 			Try("", run);
