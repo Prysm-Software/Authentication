@@ -23,9 +23,12 @@ namespace SAML.Test
 		const string RelayState = "RelayState";
 		const string SamlResponseParam = "SamlResponse";
 
+		const string Version = "SAML.Test 2026 v4";
+
 		static void Main()
 		{
-			Console.WriteLine("\n   SAML.Test 2026 v4\n");
+			Console.Title = Version;
+			Console.WriteLine($"\n   {Version}\n");
 			Console.WriteLine("This tool acts as an AppVision SAML Service Provider: it sends an AuthnRequest to your");
 			Console.WriteLine("Identity Provider, receives the SAML response and validates it, exactly like the plugin.\n");
 			Try("", run);

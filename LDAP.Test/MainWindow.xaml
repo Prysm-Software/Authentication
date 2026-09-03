@@ -6,7 +6,7 @@
         xmlns:l="clr-namespace:LDAP.Test"
         xmlns:p="clr-namespace:LDAP.Test.Properties"
         mc:Ignorable="d"
-        Title="LDAP.Test 2023 v3" Height="450" Width="800">
+        Title="LDAP.Test 2026 v4" Height="500" Width="800">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="300" x:Name="leftPane"/>
@@ -48,13 +48,14 @@
             <ItemsControl DockPanel.Dock="Top" Margin="16 8 8 8">
                 <DockPanel>
                     <Label Width="100">User name</Label>
+                    <!-- x:Name doubles as the UI-Automation AutomationId, so tests can find it -->
                     <TextBox Name="user_name"/>
                 </DockPanel>
                 <DockPanel>
                     <Label Width="100">Password</Label>
                     <PasswordBox x:Name="user_pwd"/>
                 </DockPanel>
-                <Button Click="Validate">Validate credentials</Button>
+                <Button x:Name="validate_btn" Click="Validate">Validate credentials</Button>
             </ItemsControl>
 
             <TextBox x:Name="log"/>

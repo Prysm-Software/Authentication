@@ -25,6 +25,18 @@ mode, ...). Fill the left-hand settings panel (server, base DN, bind account, po
 search filter), enter a user to validate, and click **Validate credentials**. Settings are saved
 between runs.
 
+> **Group resolution — supported schemes.** LDAP.Test lists a user's groups using two schemes:
+> the Active-Directory style `memberOf` attribute on the user entry, and the RFC 2307 posix style
+> `memberUid` on `posixGroup` entries. It does **not** resolve the `groupOfUniqueNames` /
+> `uniqueMember` scheme (where groups reference the user's full DN), so against a directory that
+> uses only `uniqueMember` (e.g. the public `ldap.forumsys.com` test server) the group list comes
+> back empty even though bind, search and password validation succeed. This mirrors what AppVision
+> itself reads, so an empty list here is a real hint to check how the directory models membership.
+
+The project ships with default settings pointing at the public **ldap.forumsys.com** test server
+(bind `cn=read-only-admin,dc=example,dc=com` / `password`, base `dc=example,dc=com`), so the tool
+can be tried immediately — validate e.g. user `newton` or `einstein` with password `password`.
+
 ### SAML.Test
 Console tool for **SAML 2.0** authentication. It acts as an AppVision Service Provider, using the
 SAML component vendored verbatim from the `appPluginSAML` plugin so validation is identical to
@@ -42,7 +54,7 @@ can be tried end to end before plugging in a real IdP.
 ## Building
 
 All three projects target **.NET Framework 4.8** and have no NuGet dependencies. Open
-`Authentication.sln` in **Visual Studio 2022** and build, or from the command line:
+`Authentication.sln` in **Visual Studio 2022+** and build, or from the command line:
 
 ```
 dotnet build Authentication.sln

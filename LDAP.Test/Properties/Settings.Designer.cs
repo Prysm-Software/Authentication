@@ -142,5 +142,29 @@ namespace LDAP.Test.Properties {
                 this["Timeout"] = value;
             }
         }
+
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("newton")]
+        public string ValidateUser {
+            get {
+                return ((string)(this["ValidateUser"]));
+            }
+            set {
+                this["ValidateUser"] = value;
+            }
+        }
+
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("password")]
+        public string ValidatePwd {
+            get {
+                return ((string)(this["ValidatePwd"]));
+            }
+            set {
+                this["ValidatePwd"] = value;
+            }
+        }
     }
 }

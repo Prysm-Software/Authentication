@@ -20,9 +20,12 @@ namespace AD.Test
     /// </summary>
     internal class Program
     {
+        const string Version = "AD.Test 2026 v4";
+
         static void Main(string[] args)
         {
-            Console.WriteLine("\n   AD.Test 2026 v4\n");
+            Console.Title = Version;
+            Console.WriteLine($"\n   {Version}\n");
             Try("", run);
             Console.WriteLine("Press any key...");
             Console.ReadKey();

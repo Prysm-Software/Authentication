@@ -32,5 +32,11 @@
     <Setting Name="Timeout" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">5</Value>
     </Setting>
+    <Setting Name="ValidateUser" Type="System.String" Scope="User">
+      <Value Profile="(Default)">newton</Value>
+    </Setting>
+    <Setting Name="ValidatePwd" Type="System.String" Scope="User">
+      <Value Profile="(Default)">password</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

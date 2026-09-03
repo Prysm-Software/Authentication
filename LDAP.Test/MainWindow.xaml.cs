@@ -29,6 +29,11 @@ namespace LDAP.Test
             InitializeComponent();
             settings_pwd.Password = sett.Pwd;
             leftPane.Width = new GridLength(sett.leftPane);
+
+            // the user to validate and its password are persisted settings too
+            // (PasswordBox cannot be data-bound, so load/save them from code-behind)
+            user_name.Text = sett.ValidateUser;
+            user_pwd.Password = sett.ValidatePwd;
         }
 
         private void Settings_Click(object sender, MouseButtonEventArgs e)
@@ -64,6 +69,8 @@ namespace LDAP.Test
             {
                 sett.Pwd = settings_pwd.Password;
                 sett.leftPane = (int)leftPane.Width.Value;
+                sett.ValidateUser = user_name.Text;
+                sett.ValidatePwd = user_pwd.Password;
                 sett.Save();
 
                 var svr = sett.Server + ':' + sett.Port;
@@ -113,7 +120,14 @@ namespace LDAP.Test
                     ldap.Bind();
                     Log($"password is valid.");
 
-                    // query membership
+                    // Query group membership. Directories model it in different ways and this tool
+                    // (like AppVision) resolves two of them:
+                    //   - memberOf  : Active Directory style, an attribute on the user entry.
+                    //   - memberUid : RFC 2307 posixGroup style, groups referencing the user's uid.
+                    // A third scheme is NOT handled: groupOfUniqueNames / uniqueMember, where the group
+                    // references the user's full DN (used e.g. by the ldap.forumsys.com test server).
+                    // Against such a directory bind/search/password checks pass but the group list is
+                    // empty — an expected result, not a failure.
                     var ldapGroups = new List<string>();
                     var userUid = user.Attributes["uid"];
 
