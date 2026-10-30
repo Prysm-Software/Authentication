@@ -171,8 +171,10 @@ internal class Program
 			Warn($"Algorithm {alg} is refused: the server accepts RS256, PS256 and ES256 only (no shared-secret HMAC, no 'none'). Make the provider sign access tokens with RS256.");
 		if (kid != null && keys is { Count: > 0 } && !keys.Any(k => k.Kid == kid))
 			Warn($"Key id '{kid}' is not among the {keys.Count} published key(s): the token was signed by another key (rotated key, another realm or tenant, stale JwksFile). appServer re-reads the discovery on an unknown kid (at most every 5 min); with a JwksFile, update the file.");
-		if (typ.EqualsInv("ID") || (conf.ClientId is { } client && aud.Contains(client) && !aud.Contains(conf.Audience)))
-			Warn("This looks like an ID token (typ=ID, or audience = the client id), not an access token: the server refuses it. Send the access_token of the token response and make it a JWT carrying the Audience (Keycloak: audience mapper on the client).");
+		if (typ.EqualsInv("ID"))
+			Warn("This is an ID token (typ=ID), not an access token: the server refuses it. Send the access_token of the token response and make it a JWT carrying the Audience (Keycloak: audience mapper on the client).");
+		else if (conf.ClientId is { } client && aud.Contains(client) && !aud.Contains(conf.Audience))
+			Warn($"aud = the client id '{client}', not Audience '{conf.Audience}'. Entra ID v2 access token of an API exposed by the same registration: the audience is the application GUID without the api:// prefix, so set Audience to '{client}'. Keycloak: this is an ID token (client id as audience), send the access_token instead.");
 		else if (aud.Length == 0)
 			Warn($"No aud claim: the server refuses a token without its Audience. Keycloak: add an 'Audience' mapper to the client (Included Custom Audience = {conf.Audience}, 'Add to access token' on); Entra ID: request the scope of the exposed API ({conf.Audience}/.default).");
 		else if (!aud.Contains(conf.Audience))
@@ -276,7 +278,7 @@ internal class Program
 					else if (login.Status == 500 || reason.Contains("method"))
 						Warn("Is the OIDC method enabled on the server (App.Main.Authentication.Methods contains OIDC) and started (appServer log at start-up)?");
 					else if (Explain(reason) is { } hint)
-						Warn($"On the server: {hint} The token passed here, so the server options (App.Main.Authentication.Oidc.*) differ from App.config, or its clock does.");
+						Warn($"On the server: {hint}" + (identity != null ? " The token passed here, so the server options (App.Main.Authentication.Oidc.*) differ from App.config, or its clock does." : " Same refusal as step 3: fix the options above, then copy them to the server."));
 					else if (identity != null)
 						Warn("The token passed here but not on the server: compare the server options (App.Main.Authentication.Oidc.*) with App.config, and the clocks of both machines.");
 				}
